@@ -6,6 +6,13 @@ A biography timeline toolkit for turning scattered public material into structur
 
 ![Biography timeline preview](docs/screenshot.png)
 
+
+## Visual Tour | 图像导览
+
+| Product Highlights | Build / Remix Flow |
+|---|---|
+| ![Product highlights](docs/feature-map.png) | ![Build and remix flow](docs/workflow-map.png) |
+
 ## Why Star This | 为什么值得 Star
 
 - Converts long-form research into JSON timelines, readable HTML previews, and source notes.
