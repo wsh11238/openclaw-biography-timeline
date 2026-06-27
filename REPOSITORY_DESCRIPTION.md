@@ -1,1 +1,1 @@
-人物时间线生成器 | Biography timeline toolkit for structured life stories, source notes, and archival HTML previews.
+人物时间线生成器：把公开资料整理成关键线索、详细年表、成就争议、深描复盘和来源说明，支持 JSON 数据、HTML 模板和批量生成脚本，适合人物志与历史研究。
