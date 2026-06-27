@@ -1,0 +1,1405 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>人物时间线｜人物时间线与大事记</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --archive-ink: #202124;
+      --archive-muted: #667085;
+      --archive-line: #e5e7eb;
+      --archive-soft: #f7f7f4;
+      --archive-accent: #6f2d37;
+      --archive-accent-soft: #f7ecee;
+      --archive-green: #476458;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      color: var(--archive-ink);
+      background: var(--archive-soft);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+    }
+
+    a {
+      color: var(--archive-accent);
+      text-underline-offset: 0.18em;
+    }
+
+    .archive-shell {
+      max-width: 1180px;
+    }
+
+    .archive-hero {
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: clamp(1rem, 2vw, 1.5rem);
+    }
+
+    .kicker {
+      color: var(--archive-accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .hero-main-row {
+      display: flex;
+      align-items: center;  /* 整体垂直居中 */
+      gap: 1.2rem;
+    }
+    .hero-name-block {
+      flex: 1;
+      min-width: 0;  /* 防止文字溢出 */
+    }
+    .hero-portrait {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--archive-line);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    .hero-portrait:hover {
+      opacity: 1;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 7vw, 4.8rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      color: var(--archive-muted);
+      max-width: 760px;
+      line-height: 1.2;
+    }
+    .subject-desc {
+      color: var(--archive-muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+      margin: 0.15rem 0 0;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-summary {
+      max-width: 920px;
+      margin: 0;
+      color: #30333a;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .hero-summary p {
+      margin-bottom: 0.55rem;
+    }
+
+    .hero-summary p:last-child {
+      margin-bottom: 0;
+    }
+
+    .hero-aside {
+      border-top: 1px solid var(--archive-line);
+      padding-top: 1rem;
+    }
+
+    .hero-aside-title {
+      margin: 0 0 0.7rem;
+      color: #344054;
+      font-size: 0.94rem;
+      line-height: 1.35;
+      font-weight: 780;
+      letter-spacing: 0;
+    }
+
+    .quick-nav {
+      gap: 0.5rem;
+    }
+
+    .quick-nav a {
+      border: 1px solid var(--archive-line);
+      color: #344054;
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .quick-nav a:hover {
+      border-color: rgba(111, 45, 55, 0.35);
+      color: var(--archive-accent);
+      background: var(--archive-accent-soft);
+    }
+
+    .age-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+      gap: 0.75rem;
+      margin: 1.4rem 0 0;
+    }
+
+    .age-fact {
+      background: #f8fafc;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: 0.85rem 0.95rem;
+    }
+
+    .age-fact span {
+      display: block;
+      color: var(--archive-muted);
+      font-size: 0.78rem;
+      font-weight: 650;
+    }
+
+    .age-fact strong {
+      display: block;
+      margin-top: 0.1rem;
+      color: var(--archive-ink);
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .key-overview {
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    }
+
+    .hero-aside .age-overview {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin: 0;
+    }
+
+    .hero-aside .age-fact {
+      min-width: 0;
+      padding: 0.72rem 0.78rem;
+    }
+
+    .hero-aside .age-fact strong {
+      font-size: 0.96rem;
+    }
+
+    .key-fact p {
+      margin: 0.28rem 0 0;
+      color: var(--archive-muted);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .content-section {
+      padding: 1.6rem 0;
+      border-bottom: 1px solid var(--archive-line);
+    }
+
+    .content-section:last-child {
+      border-bottom: 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+      font-size: 1.35rem;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 4px;
+      height: 1.25rem;
+      border-radius: 999px;
+      background: var(--archive-accent);
+    }
+
+    .summary {
+      max-width: 820px;
+      color: #30333a;
+      font-size: 1.02rem;
+    }
+
+    .section-note {
+      max-width: 880px;
+      color: var(--archive-muted);
+      font-size: 0.88rem;
+    }
+
+    .summary p:last-child,
+    .notice p:last-child,
+    .event p:last-child,
+    .stage-card p:last-child,
+    .deep-card p:last-child,
+    .turn-card p:last-child,
+    .era-card p:last-child,
+    .legacy-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .epitaph-card {
+      background: #202124;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: clamp(1.2rem, 3vw, 1.8rem);
+    }
+
+    .epitaph-card > span {
+      display: block;
+      color: rgba(255, 255, 255, 0.64);
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .epitaph-card p {
+      margin: 0.25rem 0 0;
+      font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+      font-weight: 750;
+      line-height: 1.55;
+    }
+
+    .deep-grid,
+    .turn-grid,
+    .era-grid,
+    .legacy-grid,
+    .curve-grid {
+      display: grid;
+      grid-template-columns: 1fr;  /* 上下堆叠 */
+      gap: 0.85rem;
+    }
+
+    .deep-card,
+    .turn-card,
+    .era-card,
+    .legacy-card,
+    .curve-card {
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .deep-card.achievement {
+      border-color: #c7ead8;
+      background: #fbfffd;
+    }
+
+    .brief-list {
+      display: grid;
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .brief-row {
+      display: grid;
+      grid-template-columns: 7.2rem minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--archive-line);
+    }
+
+    .brief-row:last-child {
+      border-bottom: 0;
+    }
+
+    .brief-row.caution,
+    .brief-row.controversy {
+      background: #fffdf6;
+    }
+
+    .brief-label {
+      color: var(--archive-accent);
+      font-size: 0.78rem;
+      font-weight: 780;
+      line-height: 1.45;
+    }
+
+    .brief-body h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1rem;
+      line-height: 1.45;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .brief-body p {
+      margin: 0;
+      color: #424751;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .sidebar-block {
+      margin-bottom: 1rem;
+    }
+
+    .stage-panel .sidebar-block {
+      margin-bottom: 0;
+    }
+
+    .stage-panel .brief-list {
+      border-color: #ead8ca;
+    }
+
+    .stage-panel .brief-row {
+      grid-template-columns: 4.8rem minmax(0, 1fr);
+      gap: 0.55rem;
+      padding: 0.66rem 0.72rem;
+    }
+
+    .stage-panel .brief-label {
+      font-size: 0.72rem;
+    }
+
+    .stage-panel .brief-body h3 {
+      font-size: 0.88rem;
+      line-height: 1.42;
+    }
+
+    .stage-panel .brief-body p {
+      font-size: 0.76rem;
+      line-height: 1.46;
+    }
+
+    .deep-card.controversy,
+    .deep-card.caution {
+      border-color: #f5dfab;
+      background: #fffdf6;
+    }
+
+    .deep-label,
+    .card-kicker {
+      display: inline-flex;
+      margin-bottom: 0.45rem;
+      color: var(--archive-accent);
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+
+    .deep-card h3,
+    .turn-card h3,
+    .era-card h3,
+    .legacy-card h3,
+    .curve-card h3 {
+      margin: 0 0 0.45rem;
+      font-size: 1.02rem;
+      line-height: 1.45;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .deep-card p,
+    .turn-card p,
+    .era-card p,
+    .legacy-card p,
+    .curve-card p {
+      color: #424751;
+      font-size: 0.93rem;
+    }
+
+    .turn-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fff8f1 100%);
+      border-color: #edcdb1;
+    }
+
+    .turn-list {
+      display: grid;
+      gap: 0.45rem;
+      margin: 0.65rem 0 0;
+      color: #424751;
+      font-size: 0.9rem;
+    }
+
+    .turn-list div {
+      display: grid;
+      gap: 0.1rem;
+    }
+
+    .turn-list dt {
+      color: var(--archive-muted);
+      font-size: 0.74rem;
+      font-weight: 750;
+    }
+
+    .turn-list dd {
+      margin: 0;
+    }
+
+    .relationship-map {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .network-center {
+      display: grid;
+      place-content: center;
+      min-height: 15rem;
+      border-radius: 8px;
+      color: #ffffff;
+      background: radial-gradient(circle at 30% 30%, #9b4b57, var(--archive-accent));
+      text-align: center;
+      padding: 1.25rem;
+    }
+
+    .network-center strong {
+      display: block;
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .network-center span {
+      margin-top: 0.35rem;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.82rem;
+    }
+
+    .network-nodes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7rem;
+    }
+
+    .network-node {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: 0.85rem;
+    }
+
+    .network-node::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.85rem;
+      bottom: 0.85rem;
+      width: 4px;
+      border-radius: 0 999px 999px 0;
+      background: var(--archive-accent);
+    }
+
+    .network-node.collaborator::before,
+    .network-node.family::before {
+      background: #476458;
+    }
+
+    .network-node.institution::before {
+      background: #356a9a;
+    }
+
+    .network-node.critic::before,
+    .network-node.rival::before {
+      background: #a84b24;
+    }
+
+    .network-node h3 {
+      margin: 0 0 0.2rem;
+      font-size: 0.96rem;
+      font-weight: 750;
+    }
+
+    .network-node p {
+      margin: 0;
+      color: #424751;
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .curve-track {
+      height: 0.56rem;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #edf0f3;
+    }
+
+    .curve-fill {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--archive-accent), #c06b37);
+    }
+
+    .curve-points {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .curve-point {
+      display: grid;
+      gap: 0.24rem;
+    }
+
+    .curve-point header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      color: #344054;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .curve-note {
+      color: var(--archive-muted);
+      font-size: 0.78rem;
+    }
+
+    .review-block,
+    .review-panel {
+      margin-top: 1rem;
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: clamp(1rem, 2.4vw, 1.35rem);
+    }
+
+    .review-main {
+      background: linear-gradient(180deg, #ffffff 0%, #fffaf4 100%);
+      border-color: #ead8ca;
+    }
+
+    .review-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .review-heading span {
+      display: inline-grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--archive-accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .review-heading h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.35;
+      font-weight: 780;
+      letter-spacing: 0;
+    }
+
+    .review-copy {
+      margin: 0 0 0.95rem;
+      color: var(--archive-muted);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .decision-rail {
+      position: relative;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .decision-row {
+      display: grid;
+      grid-template-columns: 8.4rem minmax(0, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .decision-marker {
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #ffffff;
+      background: var(--archive-accent);
+      text-align: center;
+      padding: 0.8rem;
+    }
+
+    .decision-marker span {
+      font-size: 0.86rem;
+      font-weight: 760;
+      line-height: 1.35;
+    }
+
+    .decision-body {
+      min-width: 0;
+      border: 1px solid #ead8ca;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 0.95rem;
+    }
+
+    .decision-body h4 {
+      margin: 0 0 0.65rem;
+      font-size: 1rem;
+      line-height: 1.45;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .decision-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.7rem;
+      margin: 0;
+    }
+
+    .decision-facts div {
+      min-width: 0;
+      border-left: 3px solid #ead8ca;
+      padding-left: 0.65rem;
+    }
+
+    .decision-facts dt {
+      color: var(--archive-muted);
+      font-size: 0.74rem;
+      font-weight: 780;
+    }
+
+    .decision-facts dd {
+      margin: 0.12rem 0 0;
+      color: #424751;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .review-grid,
+    .influence-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .relation-cloud {
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .relation-pill {
+      position: relative;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: 0.8rem 0.85rem 0.8rem 1rem;
+      background: #fbfcfd;
+    }
+
+    .relation-pill::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.75rem;
+      bottom: 0.75rem;
+      width: 4px;
+      border-radius: 0 999px 999px 0;
+      background: var(--archive-accent);
+    }
+
+    .relation-pill.collaborator::before,
+    .relation-pill.family::before {
+      background: #476458;
+    }
+
+    .relation-pill.institution::before {
+      background: #356a9a;
+    }
+
+    .relation-pill strong,
+    .era-list-compact strong,
+    .impact-list strong {
+      display: block;
+      color: #24272d;
+      font-size: 0.94rem;
+      line-height: 1.4;
+    }
+
+    .relation-pill span,
+    .era-list-compact span,
+    .impact-list span {
+      display: inline-flex;
+      margin: 0.12rem 0 0.3rem;
+      color: var(--archive-accent);
+      font-size: 0.74rem;
+      font-weight: 760;
+    }
+
+    .relation-pill p,
+    .era-list-compact p,
+    .impact-list p,
+    .trajectory-row p {
+      margin: 0 0 0.55rem;
+      color: #424751;
+      font-size: 0.84rem;
+      line-height: 1.58;
+    }
+
+    .era-list-compact,
+    .impact-list,
+    .trajectory-list {
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .era-list-compact li,
+    .impact-list li,
+    .trajectory-row {
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      background: #fbfcfd;
+      padding: 0.8rem 0.85rem;
+    }
+
+    .trajectory-row h4 {
+      margin: 0 0 0.35rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .mini-curve-list {
+      display: grid;
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+    }
+
+    .mini-curve-point {
+      display: grid;
+      gap: 0.22rem;
+    }
+
+    .mini-curve-point header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      color: #344054;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .chips,
+    .event-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .chips {
+      margin-top: 0.9rem;
+    }
+
+    .chip,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.7rem;
+      padding: 0.2rem 0.58rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .chip,
+    .tag {
+      color: #475467;
+      background: #f8fafc;
+      border: 1px solid var(--archive-line);
+    }
+
+    .source-refs {
+      display: inline-flex;
+      align-items: baseline;
+      margin-left: 0.28em;
+      color: #8a6370;
+      font-size: 0.72em;
+      font-weight: 650;
+      line-height: 1;
+      white-space: nowrap;
+      vertical-align: baseline;
+    }
+
+    .source-ref {
+      display: inline-block;
+      color: #8a6370;
+      background: transparent;
+      border: 0;
+      font-size: inherit;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .source-separator {
+      color: #a39299;
+    }
+
+    .source-ref:hover {
+      color: var(--archive-accent);
+      text-decoration: underline;
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .tag.major {
+      color: #ffffff;
+      background: var(--archive-accent);
+      border-color: var(--archive-accent);
+    }
+
+    .tag.confidence-high {
+      color: #226149;
+      background: #ecfdf3;
+      border-color: #c7ead8;
+    }
+
+    .tag.confidence-medium {
+      color: #694a12;
+      background: #fffaeb;
+      border-color: #f5dfab;
+    }
+
+    .tag.confidence-disputed,
+    .tag.confidence-low {
+      color: #8a3512;
+      background: #fff4ed;
+      border-color: #ffd6bd;
+    }
+
+    .stage-timeline,
+    .context-list,
+    .timeline,
+    .bibliography {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .stage-timeline {
+      position: relative;
+      display: grid;
+      gap: 0.8rem;
+      padding-left: 1.25rem;
+    }
+
+    .stage-timeline::before {
+      content: "";
+      position: absolute;
+      left: 0.22rem;
+      top: 0.35rem;
+      bottom: 0.35rem;
+      width: 2px;
+      background: var(--archive-line);
+    }
+
+    .stage-card {
+      position: relative;
+      background: linear-gradient(180deg, #ffffff 0%, #fbf6f1 100%);
+      border: 1px solid #ead8ca;
+      border-radius: 8px;
+      padding: 0.9rem 0.95rem;
+    }
+
+    .stage-card::before {
+      content: "";
+      position: absolute;
+      left: -1.31rem;
+      top: 1.35rem;
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 50%;
+      background: var(--archive-accent);
+      box-shadow: 0 0 0 4px var(--archive-soft);
+    }
+
+    .stage-meta,
+    .event time {
+      display: inline-block;
+      color: var(--archive-green);
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .stage-card h3 {
+      margin: 0.18rem 0 0.4rem;
+      font-size: 1rem;
+      line-height: 1.45;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .stage-card p {
+      color: #424751;
+      font-size: 0.88rem;
+    }
+
+    .timeline-layout {
+      align-items: start;
+    }
+
+    .stage-panel {
+      position: sticky;
+      top: 1rem;
+    }
+
+    .stage-panel .section-title {
+      font-size: 1.08rem;
+    }
+
+    .context-note {
+      margin: 0 0 0.75rem;
+      color: var(--archive-muted);
+      font-size: 0.86rem;
+      line-height: 1.65;
+    }
+
+    .context-list {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .context-card {
+      display: grid;
+      grid-template-columns: 4.8rem minmax(0, 1fr);
+      gap: 0.7rem;
+      align-items: start;
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: 0.65rem 0.7rem;
+    }
+
+    .context-card + .context-card {
+      border-color: #ead8ca;
+    }
+
+    .context-label {
+      display: inline-flex;
+      color: var(--archive-accent);
+      font-size: 0.74rem;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .context-value {
+      display: block;
+      color: #24272d;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      font-weight: 750;
+    }
+
+    .context-card p {
+      margin: 0.08rem 0 0;
+      color: #424751;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 0.45rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .event {
+      position: relative;
+      display: block;
+      background: #ffffff;
+      border: 1px solid var(--archive-line);
+      border-radius: 8px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .event-major {
+      background: #fff8f1;
+      border-color: #edcdb1;
+      box-shadow: inset 3px 0 0 #a84b24;
+    }
+
+    .event-detail {
+      display: block;
+    }
+
+    .event-summary {
+      position: relative;
+      display: grid;
+      grid-template-columns: 5.2rem minmax(0, 1fr) 1.4rem;
+      gap: 0.72rem;
+      align-items: stretch;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .event-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .event-summary::after {
+      content: "+";
+      display: grid;
+      place-items: center;
+      align-self: center;
+      width: 1.15rem;
+      height: 1.15rem;
+      margin-right: 0.58rem;
+      border-radius: 50%;
+      color: #7b8493;
+      background: #f1f3f5;
+      font-size: 0.86rem;
+      font-weight: 750;
+      line-height: 1;
+    }
+
+    .event-detail[open] .event-summary::after {
+      content: "-";
+      color: #ffffff;
+      background: var(--archive-accent);
+    }
+
+    .event-age-tab {
+      display: grid;
+      place-content: center;
+      gap: 0.04rem;
+      min-height: 100%;
+      padding: 0.52rem 0.34rem;
+      color: #ffffff;
+      background: var(--archive-accent);
+      text-align: center;
+    }
+
+    .event-major .event-age-tab {
+      background: #a84b24;
+    }
+
+    .event-age-tab span {
+      font-size: 0.64rem;
+      font-weight: 700;
+      opacity: 0.82;
+    }
+
+    .event-age-tab strong {
+      display: block;
+      font-size: 0.96rem;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .event-body {
+      min-width: 0;
+      padding: 0.5rem 0 0.52rem;
+    }
+
+    .event-meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.35rem 0.65rem;
+      margin-bottom: 0.18rem;
+    }
+
+    .event-meta-line .event-tools {
+      gap: 0.25rem;
+    }
+
+    .event .tag {
+      min-height: 1.24rem;
+      padding: 0.05rem 0.38rem;
+      font-size: 0.66rem;
+      line-height: 1.2;
+    }
+
+    .event h3 {
+      margin: 0;
+      font-size: 0.94rem;
+      line-height: 1.32;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .event-extra {
+      margin-left: 5.2rem;
+      border-top: 1px solid var(--archive-line);
+      padding: 0.58rem 0.9rem 0.72rem 0.72rem;
+    }
+
+    .event-extra p {
+      margin: 0;
+      color: #424751;
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+
+    .notice {
+      background: transparent;
+      border: 0;
+      padding: 0.25rem 0 0;
+    }
+
+    .notes-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--archive-muted);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .notes-list li + li {
+      margin-top: 0.55rem;
+    }
+
+    .bibliography {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .bibliography li {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: var(--archive-muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .source-id {
+      color: var(--archive-accent);
+      font-weight: 750;
+    }
+
+    .source-meta {
+      margin: 0.18rem 0 0;
+      color: var(--archive-muted);
+      font-size: 0.76rem;
+    }
+
+    .meta-appendix {
+      margin-top: 1.6rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--archive-line);
+      color: var(--archive-muted);
+      font-size: 0.82rem;
+    }
+
+    .meta-appendix details {
+      border-bottom: 1px solid var(--archive-line);
+      padding: 0.5rem 0;
+    }
+
+    .meta-appendix details:last-child {
+      border-bottom: 0;
+    }
+
+    .meta-appendix summary {
+      cursor: pointer;
+      color: #7b8493;
+      font-weight: 650;
+      font-size: 0.84rem;
+    }
+
+    .meta-appendix a {
+      color: #717b8c;
+    }
+
+    footer {
+      color: var(--archive-muted);
+      font-size: 0.86rem;
+      border-top: 1px solid var(--archive-line);
+    }
+
+    @media (max-width: 991.98px) {
+      .age-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-aside .age-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .deep-grid,
+      .turn-grid,
+      .era-grid,
+      .legacy-grid,
+      .curve-grid,
+      .relationship-map,
+      .network-nodes,
+      .review-grid,
+      .influence-layout,
+      .decision-facts {
+        grid-template-columns: 1fr;
+      }
+
+      .decision-row {
+        grid-template-columns: 1fr;
+      }
+
+      .brief-row,
+      .context-card {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+      }
+
+      .stage-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .archive-hero {
+        padding: 1.2rem;
+      }
+
+      .event {
+        display: block;
+      }
+
+      .event-summary {
+        grid-template-columns: 4.45rem minmax(0, 1fr) 1.15rem;
+        gap: 0.5rem;
+      }
+
+      .event-summary::after {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.38rem;
+        font-size: 0.76rem;
+      }
+
+      .event-age-tab {
+        padding: 0.55rem 0.28rem;
+      }
+
+      .event-age-tab strong {
+        font-size: 0.88rem;
+      }
+
+      .event-body {
+        padding: 0.56rem 0.6rem 0.6rem 0;
+      }
+
+      .event h3 {
+        font-size: 0.92rem;
+      }
+
+      .event-extra {
+        margin-left: 4.45rem;
+        padding: 0.52rem 0.7rem 0.66rem 0.6rem;
+      }
+
+      .event .tag {
+        font-size: 0.62rem;
+      }
+
+      .age-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-aside .age-overview {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-xxl archive-shell py-4 py-lg-5">
+    <header class="archive-hero mb-4">
+      <p class="kicker mb-2">Biographical Timeline Archive</p>
+      <div class="hero-main-row">
+        <div class="hero-name-block">
+          <h1 class="fw-bold mb-0">人物时间线</h1>
+          <p class="meta mb-0">人物时间线档案</p>
+          
+        </div>
+        
+      </div>
+      <div class="hero-layout">
+        <div class="hero-main">
+          <div class="hero-summary"><p>黄峥（1980年1月1日—），浙江杭州人，拼多多（Pinduoduo）创始人，曾任谷歌工程师，2007年创业，2015年创立拼多多，以「社交电商+低价团购」模式颠覆中国电商格局，用户规模一度超越阿里系，2021年退居幕后，专注慈善公益。</p></div>
+        </div>
+        <aside class="hero-aside" aria-labelledby="hero-aside-heading">
+          <h2 id="hero-aside-heading" class="hero-aside-title">关键线索</h2>
+          <div id="key-facts" class="age-overview key-overview" aria-label="关键线索"><div class="age-fact key-fact"><span>出生地</span><strong>浙江杭州</strong><p></p></div><div class="age-fact key-fact"><span>出生年份</span><strong>1980年</strong><p></p></div><div class="age-fact key-fact"><span>最高学历</span><strong>威斯康星大学硕士（2004）</strong><p></p></div><div class="age-fact key-fact"><span>关键身份</span><strong>拼多多创始人</strong><p></p></div><div class="age-fact key-fact"><span>财富峰值</span><strong>约391亿美元（2025年，福布斯）</strong><p></p></div><div class="age-fact key-fact"><span>代表成就</span><strong>创办中国最大农业电商平台</strong><p></p></div></div>
+        </aside>
+      </div>
+      <nav class="quick-nav d-flex flex-wrap" aria-label="页面导航">
+        <a class="btn btn-sm rounded-pill" href="#epitaph-heading">定位</a>
+        <a class="btn btn-sm rounded-pill" href="#key-facts">关键线索</a>
+        <a class="btn btn-sm rounded-pill" href="#brief-heading">成就争议</a>
+        <a class="btn btn-sm rounded-pill" href="#timeline-heading">详细时间轴</a>
+        <a class="btn btn-sm rounded-pill" href="#review-heading">深描复盘</a>
+        <a class="btn btn-sm rounded-pill" href="#source-notes">资料来源</a>
+      </nav>
+    </header>
+
+    <div class="row justify-content-center">
+      <main class="col-12">
+        
+
+        <section class="content-section" aria-labelledby="timeline-heading">
+          <div class="row g-4 timeline-layout">
+            <div class="col-lg-8">
+              <h2 id="timeline-heading" class="section-title">详细时间轴</h2>
+              <ol class="timeline"><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">出生</span><span class="tag confidence-medium">中等可信</span></div></div><h3>黄峥出生于浙江杭州</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">教育</span><span class="tag confidence-medium">中等可信</span></div></div><h3>进入浙江大学计算机系</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">荣誉</span><span class="tag confidence-medium">中等可信</span></div></div><h3>当选梅尔顿基金会学者</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">教育/职业</span><span class="tag confidence-medium">中等可信</span></div></div><h3>获威斯康星大学计算机硕士学位，加入谷歌</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">职业</span><span class="tag confidence-medium">中等可信</span></div></div><h3>随李开复回国拓展谷歌中国</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">创业</span><span class="tag confidence-medium">中等可信</span></div></div><h3>离职谷歌，创办Oku</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">创业</span><span class="tag confidence-medium">中等可信</span></div></div><h3>Oku以220万美元出售</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">创业</span><span class="tag confidence-medium">中等可信</span></div></div><h3>创立拼多多</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">上市</span><span class="tag confidence-medium">中等可信</span></div></div><h3>拼多多在纳斯达克上市</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">成就</span><span class="tag confidence-medium">中等可信</span></div></div><h3>拼多多用户规模超越阿里巴巴</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">管理</span><span class="tag confidence-medium">中等可信</span></div></div><h3>卸任拼多多CEO</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">管理</span><span class="tag confidence-medium">中等可信</span></div></div><h3>卸任董事长，退居幕后</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">慈善</span><span class="tag confidence-medium">中等可信</span></div></div><h3>承诺捐赠超10亿美元用于慈善</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">成就</span><span class="tag confidence-medium">中等可信</span></div></div><h3>Temu美国上线</h3></div></summary><div class="event-extra"><p></p></div></details></li><li class="event"><details class="event-detail"><summary class="event-summary"><div class="event-age-tab"><span>年龄</span><strong>-</strong></div><div class="event-body"><div class="event-meta-line"><time>日期不详</time><div class="event-tools"><span class="tag">财富</span><span class="tag confidence-medium">中等可信</span></div></div><h3>福布斯估计身家391亿美元</h3></div></summary><div class="event-extra"><p></p></div></details></li></ol>
+            </div>
+            <aside class="col-lg-4" aria-labelledby="brief-heading">
+              <div class="stage-panel">
+                <section class="sidebar-block" aria-labelledby="brief-heading"><h2 id="brief-heading" class="section-title">成就与争议速览</h2><div class="brief-list"><article class="brief-row achievement"><span class="brief-label">成就</span><div class="brief-body"><h3>颠覆中国电商格局</h3><p></p></div></article><article class="brief-row achievement"><span class="brief-label">成就</span><div class="brief-body"><h3>创立并培育全球化平台Temu</h3><p></p></div></article><article class="brief-row achievement"><span class="brief-label">成就</span><div class="brief-body"><h3>假货与山寨问题</h3><p></p></div></article><article class="brief-row achievement"><span class="brief-label">成就</span><div class="brief-body"><h3>员工加班文化</h3><p></p></div></article></div></section>
+                
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="content-section" aria-labelledby="review-heading"><h2 id="review-heading" class="section-title">深描复盘</h2><p class="section-note">读完时间轴后，再从“选择、关系、时代、传播”四个角度复盘人物。这个区域合并了原先分散的后半段模块。</p><div class="review-block review-main"><div class="review-heading"><span>01</span><h3>决定性转折</h3></div><p class="review-copy">把命运节点按时间推进，重点看他当时做了什么选择、带来什么结果，以及哪些地方不能脱离来源夸大。</p><div class="decision-rail"><article class="decision-row"><div class="decision-marker"><span></span></div><div class="decision-body"><h4>加入谷歌担任工程师</h4><dl class="decision-facts"><div><dt>选择</dt><dd>加入谷歌</dd></div><div><dt>结果</dt><dd>从工程师视角深度理解搜索引擎与平台商业模式，为日后创业积累核心认知</dd></div></dl></div></article><article class="decision-row"><div class="decision-marker"><span></span></div><div class="decision-body"><h4>离职谷歌回国创业</h4><dl class="decision-facts"><div><dt>选择</dt><dd>离职谷歌回国创业</dd></div><div><dt>结果</dt><dd>彻底走上创业道路，离开大公司稳定环境进入高风险创业江湖</dd></div></dl></div></article><article class="decision-row"><div class="decision-marker"><span></span></div><div class="decision-body"><h4>创立拼多多</h4><dl class="decision-facts"><div><dt>选择</dt><dd>创立拼多多</dd></div><div><dt>结果</dt><dd>在阿里京东两强格局下找到下沉市场空白，开创社交电商新范式</dd></div></dl></div></article><article class="decision-row"><div class="decision-marker"><span></span></div><div class="decision-body"><h4>拼多多在纳斯达克上市</h4><dl class="decision-facts"><div><dt>选择</dt><dd>拼多多在纳斯达克上市</dd></div><div><dt>结果</dt><dd>IPO融资16亿美元，47%持股估值140亿美元，成为中国科技企业最快成长记录之一</dd></div></dl></div></article><article class="decision-row"><div class="decision-marker"><span></span></div><div class="decision-body"><h4>拼多多用户规模超越阿里巴巴</h4><dl class="decision-facts"><div><dt>选择</dt><dd>拼多多用户规模超越阿里巴巴</dd></div><div><dt>结果</dt><dd>年度活跃买家达7.88亿，超越阿里（7.79亿），中国电商格局从两强争霸变为三足鼎立</dd></div></dl></div></article><article class="decision-row"><div class="decision-marker"><span></span></div><div class="decision-body"><h4>卸任董事长，专注慈善</h4><dl class="decision-facts"><div><dt>选择</dt><dd>卸任拼多多董事长转做慈善</dd></div><div><dt>结果</dt><dd>将股份投票权委托给董事会，专注慈善，承诺捐赠超10亿美元</dd></div></dl></div></article></div></div><div class="review-grid"><div class="review-panel"><div class="review-heading"><span>02</span><h3>关系网络</h3></div><p class="review-copy">黄峥与段永平关系密切，段永平被认为是黄峥早期创业的重要支持者</p><div class="relation-cloud"><article class="relation-pill node"><strong>未命名节点</strong><span>前领导/导师</span><p></p></article><article class="relation-pill node"><strong>未命名节点</strong><span>投资人与恩师</span><p></p></article><article class="relation-pill node"><strong>未命名节点</strong><span>同为连续创业者</span><p></p></article><article class="relation-pill node"><strong>未命名节点</strong><span>竞争对手</span><p></p></article></div></div><div class="review-panel"><div class="review-heading"><span>03</span><h3>时代坐标</h3></div><p class="review-copy">只保留时代背景中真正解释人物选择的部分。</p><ol class="era-list-compact"><li><span>1980s-1990s</span><strong>时代阶段</strong><p></p></li><li><span>2000s</span><strong>时代阶段</strong><p></p></li><li><span>2010s</span><strong>时代阶段</strong><p></p></li><li><span>2020s</span><strong>时代阶段</strong><p></p></li></ol></div></div></section>
+
+        <section id="source-notes" class="meta-appendix" aria-label="资料说明与来源">
+          <details>
+            <summary>资料说明与不确定性</summary>
+            <div class="notice"><ul class="notes-list"><li>部分具体日期（如进入谷歌的具体月份、离开谷歌创业的具体时间）未见权威中文来源</li><li>2021年卸任后的具体活动信息有限</li><li>研究方法：以「Colin Huang」「黄峥」「Pinduoduo」为关键词，通过Wikipedia英文版、Forbes获取生平数据，辅以公开媒体报道</li><li>所有日期均来自公开资料，未使用AI训练数据</li></ul></div>
+          </details>
+          <details>
+            <summary>来源目录</summary>
+            <ol class="bibliography"><li id="source-S?"><span class="source-id">[S?]</span> <a href="https://en.wikipedia.org/wiki/Colin_Huang">Colin Huang - Wikipedia (English)</a><p class="source-meta">未分级 · 访问日期：2026-06-26</p></li><li id="source-S?"><span class="source-id">[S?]</span> <a href="https://en.wikipedia.org/wiki/Pinduoduo">Pinduoduo - Wikipedia (English)</a><p class="source-meta">未分级 · 访问日期：2026-06-26</p></li><li id="source-S?"><span class="source-id">[S?]</span> <a href="https://www.forbes.com/profile/colin-huang/">Forbes Profile - Colin Huang</a><p class="source-meta">未分级 · 访问日期：2026-06-26</p></li></ol>
+          </details>
+        </section>
+      </main>
+    </div>
+
+    <footer class="mt-5 pt-3">
+      生成时间：2026-06-26。本页为资料索引与年表页面，引用来源见上方目录。
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
