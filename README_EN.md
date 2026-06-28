@@ -6,19 +6,30 @@ A toolkit for transforming public biographical research into structured timeline
 
 ![Demo](docs/demo.gif)
 
-## At A Glance
+## Understand It In 3 Seconds
 
-**Transform scattered biographical research into timelines, relationship maps, and review pages.**
+**Turn scattered public research into timelines, relationship maps, long-form reviews, and source notes.**
 
-- Great for founder profiles, biographies, historical research, course material, and content knowledge bases.
-- Timeline, key facts, achievements, controversies, relationships, and source notes are already modeled.
-- Add new JSON profiles and render more archive-style pages.
+Good fit for:
+- founder profiles
+- biography sites
+- historical research
+- course material
+- long-form content archives
 
 ## Fork It In 30 Seconds
 
-Fork it, add a person JSON plus sources, then render your own source-aware biography page.
+Fork it, add person JSON plus sources, then render your own source-aware biography page.
 
-> If this saves you from rebuilding the same product skeleton later, consider starring the repo.
+Main data to replace: person JSON files and source notes.
+
+## Publish And Promote It
+
+- Deployment guide: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+- Launch copy kit: [docs/LAUNCH_KIT.md](docs/LAUNCH_KIT.md)
+- Social preview image: [docs/social-preview.png](docs/social-preview.png)
+
+> If this template saves you from rebuilding the same product skeleton later, consider starring the repo.
 
 ## Screenshots
 
