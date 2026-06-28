@@ -4,7 +4,21 @@ A toolkit for transforming public biographical research into structured timeline
 
 **中文介绍:** [README.md](README.md)
 
-![Project preview](docs/screenshot.png)
+![Demo](docs/demo.gif)
+
+## At A Glance
+
+**Transform scattered biographical research into timelines, relationship maps, and review pages.**
+
+- Great for founder profiles, biographies, historical research, course material, and content knowledge bases.
+- Timeline, key facts, achievements, controversies, relationships, and source notes are already modeled.
+- Add new JSON profiles and render more archive-style pages.
+
+## Fork It In 30 Seconds
+
+Fork it, add a person JSON plus sources, then render your own source-aware biography page.
+
+> If this saves you from rebuilding the same product skeleton later, consider starring the repo.
 
 ## Screenshots
 

@@ -1,1 +1,9 @@
-biography,timeline,knowledge-management,static-site,research-tools,python,cloudflare-pages
+biography
+timeline
+static-site
+knowledge-base
+research
+html-template
+content-tools
+founder-profiles
+chinese
